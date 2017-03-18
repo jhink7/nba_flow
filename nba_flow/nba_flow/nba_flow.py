@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from sklearn.model_selection import train_test_split
+#from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 from modelling.marcel_projection_engine import MarcelProjectionEngine
 
@@ -42,6 +42,7 @@ mse = mean_squared_error(y_true = projs.ws_target, y_pred = projs.proj_marcel)
 rmse = mse**(0.5)
 mae = mean_absolute_error(y_true = projs.ws_target, y_pred = projs.proj_marcel)
 
+print ''
 print 'Smarter Marcel Performance'
 print 'Rsq: {}'.format(pearson)
 print 'rmse: {}'.format(rmse)
