@@ -14,8 +14,8 @@ tf.logging.set_verbosity(tf.logging.ERROR)
 COLUMNS = ["player","age","ws_3","mp_3","ws_2","mp_2","ws_1","mp_1","ws_target","mp_target"]
 FEATURES = ["age","ws_3","mp_3","ws_2","mp_2","ws_1","mp_1"]
 
-DEEP_FEATURES = ["age", "mp_3", "mp_2", "mp_1"]
-WIDE_FEATURES = ["ws_3","ws_2","ws_1"]
+DEEP_FEATURES = ["age"]
+WIDE_FEATURES = ["ws_3","ws_2","ws_1", "mp_3", "mp_2", "mp_1"]
 
 LABEL = "ws_target"
 
