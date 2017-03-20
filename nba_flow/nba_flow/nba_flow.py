@@ -13,6 +13,7 @@ from modelling.marcel_projection_engine import MarcelProjectionEngine
 train = pd.read_csv('transformed_data/train_ws.csv')
 test = pd.read_csv('transformed_data/test_ws.csv')
 
+training_set=train[(train.mp_target > 1000) & (train.mp_1 > 1000)]
 marcel = MarcelProjectionEngine(train, 'mp', 'ws', True, 1/48.0)
 projs = marcel.project_players(test)
 

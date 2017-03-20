@@ -1,0 +1,125 @@
+########################## Marcel ###################################
+Marcel Performance
+Rsq: 0.724296299781
+rmse: 0.0370131679249
+mae: 0.0290971246392
+Smarter Marcel Trained weights [0.53220430350229331, 0.21967765590522609, 0.034320918280510544]
+
+Smarter Marcel Performance
+Rsq: 0.723636108041
+rmse: 0.0375900340381
+mae: 0.0296607960491
+
+
+########################## Neural ###################################
+
+## Common Settings ##
+num_steps = 100000
+dnn_hidden_units=[1000, 500, 100],
+DEEP_FEATURES = ["age"],
+WIDE_FEATURES = ["ws_3","ws_2","ws_1"]
+
+## Config 1 ##
+
+regressor = tf.contrib.learn.DNNLinearCombinedRegressor(
+    # common settings
+    model_dir="tmp/nba_model",
+    # wide settings
+    linear_feature_columns=wide_cols,
+    #linear_optimizer=tf.train.FtrlOptimizer(...),
+    # deep settings
+    dnn_feature_columns=deep_cols,
+    dnn_hidden_units=[1000, 500, 100])
+
+DNN Performance
+Rsq: 0.670512513522
+rmse: 0.0400618128632
+mae: 0.0307737481572
+
+## Config 2 ## (10k and 100k steps were the same)
+
+regressor = tf.contrib.learn.DNNLinearCombinedRegressor(
+    # common settings
+    model_dir="tmp/nba_model",
+    # wide settings
+    linear_feature_columns=wide_cols,
+    linear_optimizer=tf.train.RMSPropOptimizer(0.01),
+    # deep settings
+    dnn_feature_columns=deep_cols,
+    dnn_hidden_units=[1000, 500, 100],
+    dnn_optimizer=tf.train.RMSPropOptimizer(0.01))
+
+Rsq: 0.669203241072
+rmse: 0.0389218618683
+mae: 0.0298216849091
+
+## Config 3 ## (10k steps)
+
+regressor = tf.contrib.learn.DNNLinearCombinedRegressor(
+    # common settings
+    model_dir="tmp/nba_model",
+    # wide settings
+    linear_feature_columns=wide_cols,
+    linear_optimizer=tf.train.RMSPropOptimizer(0.001), # learning rate decreased
+    # deep settings
+    dnn_feature_columns=deep_cols,
+    dnn_hidden_units=[1000, 500, 100],
+    dnn_optimizer=tf.train.RMSPropOptimizer(0.001))
+    #dnn_optimizer=tf.train.ProximalAdagradOptimizer(...))
+
+Rsq: 0.669203241072
+rmse: 0.0389218618683
+mae: 0.0298216849091
+
+## Config 3 ## (10k steps)
+
+regressor = tf.contrib.learn.DNNLinearCombinedRegressor(
+    # common settings
+    model_dir="tmp/nba_model",
+    # wide settings
+    linear_feature_columns=wide_cols,
+    linear_optimizer=tf.train.RMSPropOptimizer(0.001),
+    # deep settings
+    dnn_feature_columns=deep_cols,
+    dnn_hidden_units=[1000, 500, 100, 50],  # extra hidden layer
+    dnn_optimizer=tf.train.RMSPropOptimizer(0.001))
+
+Rsq: 0.661801690532
+rmse: 0.0461740148475
+mae: 0.0357659245686
+
+## Config 4 ### (Using league avg as wide column, trimming train data mp > 1000)
+
+regressor = tf.contrib.learn.DNNLinearCombinedRegressor(
+    # common settings
+    model_dir="tmp/nba_model",
+    # wide settings
+    linear_feature_columns=wide_cols,
+    linear_optimizer=tf.train.RMSPropOptimizer(0.01),
+    # deep settings
+    dnn_feature_columns=deep_cols,
+    dnn_hidden_units=[1000, 500, 100],
+    dnn_optimizer=tf.train.RMSPropOptimizer(0.01))
+
+Rsq: 0.687654081241
+rmse: 0.0398799672569
+mae: 0.0308213273458
+
+## Config 5 ##
+
+regressor = tf.contrib.learn.DNNLinearCombinedRegressor(
+    # common settings
+    model_dir="tmp/nba_model",
+    # wide settings
+    linear_feature_columns=wide_cols,
+    linear_optimizer=tf.train.ProximalAdagradOptimizer(0.01),
+    # deep settings
+    dnn_feature_columns=deep_cols,
+    dnn_hidden_units=[1000, 500, 100],
+    dnn_optimizer=tf.train.ProximalAdagradOptimizer(0.01))
+
+# Fit
+regressor.fit(input_fn=lambda: input_fn(training_set), steps=10000)
+Rsq: 0.674548767897
+rmse: 0.0389185851952
+mae: 0.0301666819762

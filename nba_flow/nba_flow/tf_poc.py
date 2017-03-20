@@ -12,10 +12,11 @@ import shutil
 tf.logging.set_verbosity(tf.logging.ERROR)
 
 COLUMNS = ["player","age","ws_3","mp_3","ws_2","mp_2","ws_1","mp_1","ws_target","mp_target"]
-FEATURES = ["age","ws_3","mp_3","ws_2","mp_2","ws_1","mp_1"]
 
-DEEP_FEATURES = ["age"]
-WIDE_FEATURES = ["ws_3","ws_2","ws_1", "mp_3", "mp_2", "mp_1"]
+FEATURES = ["age","ws_3","ws_2","ws_1", "avg"]
+
+DEEP_FEATURES = ["avg"]
+WIDE_FEATURES = ["ws_1", "ws_2", "ws_3" ] #, "mp_3", "mp_2", "mp_1"]
 
 LABEL = "ws_target"
 
@@ -27,21 +28,19 @@ def input_fn(data_set):
 
 
 def fit_and_eval_dnn(feature_cols, training_set, test_set, prediction_set, deep_cols, wide_cols):
-    # Build 2 layer fully connected DNN with 10, 10 units respectively.
-    regressor = tf.contrib.learn.DNNRegressor(feature_columns=feature_cols,
-                                              hidden_units=[10, 10],
-                                              model_dir="tmp/nba_model")
 
     regressor = tf.contrib.learn.DNNLinearCombinedRegressor(
         # common settings
         model_dir="tmp/nba_model",
         # wide settings
         linear_feature_columns=wide_cols,
-        #linear_optimizer=tf.train.FtrlOptimizer(...),
+        #linear_optimizer=tf.train.RMSPropOptimizer(0.01),
+        linear_optimizer=tf.train.ProximalAdagradOptimizer(0.01),
         # deep settings
         dnn_feature_columns=deep_cols,
-        dnn_hidden_units=[1000, 500, 100])
-        #dnn_optimizer=tf.train.ProximalAdagradOptimizer(...))
+        dnn_hidden_units=[1000, 500, 100],
+        #dnn_optimizer=tf.train.RMSPropOptimizer(0.01))
+        dnn_optimizer=tf.train.ProximalAdagradOptimizer(0.01))
 
     # Fit
     regressor.fit(input_fn=lambda: input_fn(training_set), steps=10000)
@@ -62,7 +61,7 @@ def fit_and_eval_dnn(feature_cols, training_set, test_set, prediction_set, deep_
 
 def fit_and_eval_linreg(feature_cols, training_set, test_set, prediction_set):
     linRegressor = tf.contrib.learn.LinearRegressor(feature_columns=feature_cols)
-    linRegressor.fit(input_fn=lambda: input_fn(training_set), steps=100)
+    linRegressor.fit(input_fn=lambda: input_fn(training_set), steps=1)
 
     ev = linRegressor.evaluate(input_fn=lambda: input_fn(test_set), steps=1)
     loss_score = ev["loss"]
@@ -77,13 +76,23 @@ def fit_and_eval_linreg(feature_cols, training_set, test_set, prediction_set):
 
 def main(args):
     # Load datasets
-    training_set = pd.read_csv("transformed_data/train_ws.csv", skipinitialspace=True,
-                               skiprows=1, names=COLUMNS)
-    test_set = pd.read_csv("transformed_data/test_ws.csv", skipinitialspace=True,
-                           skiprows=1, names=COLUMNS)
+    training_set = pd.read_csv("transformed_data/train_ws.csv", skipinitialspace=True, skiprows=1, names=COLUMNS)
+    test_set = pd.read_csv("transformed_data/test_ws.csv", skipinitialspace=True, skiprows=1, names=COLUMNS)
+    prediction_set = pd.read_csv("transformed_data/test_ws.csv", skipinitialspace=True, skiprows=1, names=COLUMNS)
 
-    prediction_set = pd.read_csv("transformed_data/test_ws.csv", skipinitialspace=True,
-                                 skiprows=1, names=COLUMNS)
+    training_set=training_set[(training_set.mp_target > 1000) & (training_set.mp_1 > 1000)]
+
+    training_set["avg"] = 0.11
+    test_set["avg"] = 0.11
+    prediction_set["avg"] = 0.11
+
+    #training_set.to_csv("train.csv")
+    #test_set.to_csv("test.csv")
+    #prediction_set.to_csv("pred.csv")
+
+    #training_set = pd.read_csv("train.csv")
+    #test_set = pd.read_csv("test.csv")
+    #prediction_set = pd.read_csv("pred.csv")
 
     # Feature cols
     feature_cols = [tf.contrib.layers.real_valued_column(k)
