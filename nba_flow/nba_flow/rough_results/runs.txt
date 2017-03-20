@@ -123,3 +123,5 @@ regressor.fit(input_fn=lambda: input_fn(training_set), steps=10000)
 Rsq: 0.674548767897
 rmse: 0.0389185851952
 mae: 0.0301666819762
+
+## Config 6 ##
