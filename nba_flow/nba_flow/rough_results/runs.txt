@@ -125,3 +125,101 @@ rmse: 0.0389185851952
 mae: 0.0301666819762
 
 ## Config 6 ##
+regressor = tf.contrib.learn.DNNLinearCombinedRegressor(
+    # common settings
+    model_dir="tmp/nba_model",
+    # wide settings
+    linear_feature_columns=wide_cols,
+    #linear_optimizer=tf.train.RMSPropOptimizer(0.01),
+    linear_optimizer=tf.train.AdagradOptimizer(0.001),
+    # deep settings
+    dnn_feature_columns=deep_cols,
+    dnn_hidden_units=[1000, 500, 100],
+    #dnn_optimizer=tf.train.RMSPropOptimizer(0.01))
+    dnn_optimizer=tf.train.AdagradOptimizer(0.001))
+
+Rsq: 0.655548810551
+rmse: 0.0486681537288
+mae: 0.0381484281345
+
+## Config 7 ##
+    regressor = tf.contrib.learn.DNNLinearCombinedRegressor(
+        # common settings
+        model_dir="tmp/nba_model",
+        # wide settings
+        linear_feature_columns=wide_cols,
+        #linear_optimizer=tf.train.RMSPropOptimizer(0.01),
+        linear_optimizer=tf.train.AdamOptimizer(0.01),
+        # deep settings
+        dnn_feature_columns=deep_cols,
+        dnn_hidden_units=[1000, 500, 100],
+        #dnn_optimizer=tf.train.RMSPropOptimizer(0.01))
+        dnn_optimizer=tf.train.AdamOptimizer(0.01))
+
+    # Fit
+    regressor.fit(input_fn=lambda: input_fn(training_set), steps=1000)
+
+Rsq: 0.688682280082
+rmse: 0.038118671828
+mae: 0.0291123433779
+
+## Config 8 ##
+    regressor = tf.contrib.learn.DNNLinearCombinedRegressor(
+        # common settings
+        model_dir="tmp/nba_model",
+        # wide settings
+        linear_feature_columns=wide_cols,
+        #linear_optimizer=tf.train.RMSPropOptimizer(0.01),
+        linear_optimizer=tf.train.AdamOptimizer(0.0045),
+        # deep settings
+        dnn_feature_columns=deep_cols,
+        dnn_hidden_units=[125, 64, 12],
+        #dnn_optimizer=tf.train.RMSPropOptimizer(0.01))
+        dnn_optimizer=tf.train.AdamOptimizer(0.0045))
+
+Rsq: 0.688661691368
+rmse: 0.0381206965362
+mae: 0.0291099089674
+
+
+## Config 9 ## (age: wide, avg: deep)
+    regressor = tf.contrib.learn.DNNLinearCombinedRegressor(
+        # common settings
+        model_dir="tmp/nba_model",
+        # wide settings
+        linear_feature_columns=wide_cols,
+        #linear_optimizer=tf.train.RMSPropOptimizer(0.01),
+        linear_optimizer=tf.train.AdamOptimizer(0.001),
+        # deep settings
+        dnn_feature_columns=deep_cols,
+        dnn_hidden_units=[32, 16, 3],
+        #dnn_optimizer=tf.train.RMSPropOptimizer(0.01))
+        dnn_optimizer=tf.train.AdamOptimizer(0.001))
+
+    # Fit
+    regressor.fit(input_fn=lambda: input_fn(training_set), steps=10000)
+
+Rsq: 0.690606693376
+rmse: 0.0381405895155
+mae: 0.028826336115
+
+## Config 10 ## (all vars both wide and deep)
+    regressor = tf.contrib.learn.DNNLinearCombinedRegressor(
+        # common settings
+        model_dir="tmp/nba_model",
+        # wide settings
+        linear_feature_columns=wide_cols,
+        #linear_optimizer=tf.train.RMSPropOptimizer(0.01),
+        linear_optimizer=tf.train.AdamOptimizer(0.01),
+        # deep settings
+        dnn_feature_columns=deep_cols,
+        dnn_hidden_units=[32, 16, 3],
+        #dnn_optimizer=tf.train.RMSPropOptimizer(0.01))
+        dnn_optimizer=tf.train.AdamOptimizer(0.01))
+
+    # Fit
+    regressor.fit(input_fn=lambda: input_fn(training_set), steps=50000)
+
+Rsq: 0.690682434038
+rmse: 0.0381733127353
+mae: 0.0288406068781

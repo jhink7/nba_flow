@@ -15,8 +15,8 @@ COLUMNS = ["player","age","ws_3","mp_3","ws_2","mp_2","ws_1","mp_1","ws_target",
 
 FEATURES = ["age","ws_3","ws_2","ws_1", "avg"]
 
-DEEP_FEATURES = ["avg"]
-WIDE_FEATURES = ["ws_1", "ws_2", "ws_3" ] #, "mp_3", "mp_2", "mp_1"]
+DEEP_FEATURES = ["ws_1", "ws_2", "ws_3", "age", "avg"]
+WIDE_FEATURES = ["ws_1", "ws_2", "ws_3", "age", "avg" ] #, "mp_3", "mp_2", "mp_1"]
 
 LABEL = "ws_target"
 
@@ -35,15 +35,15 @@ def fit_and_eval_dnn(feature_cols, training_set, test_set, prediction_set, deep_
         # wide settings
         linear_feature_columns=wide_cols,
         #linear_optimizer=tf.train.RMSPropOptimizer(0.01),
-        linear_optimizer=tf.train.ProximalAdagradOptimizer(0.01),
+        linear_optimizer=tf.train.AdamOptimizer(0.01),
         # deep settings
         dnn_feature_columns=deep_cols,
-        dnn_hidden_units=[1000, 500, 100],
+        dnn_hidden_units=[32, 16, 3],
         #dnn_optimizer=tf.train.RMSPropOptimizer(0.01))
-        dnn_optimizer=tf.train.ProximalAdagradOptimizer(0.01))
+        dnn_optimizer=tf.train.AdamOptimizer(0.01))
 
     # Fit
-    regressor.fit(input_fn=lambda: input_fn(training_set), steps=10000)
+    regressor.fit(input_fn=lambda: input_fn(training_set), steps=100000)
 
 
     # Score accuracy
