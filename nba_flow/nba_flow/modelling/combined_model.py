@@ -16,13 +16,13 @@ tf.logging.set_verbosity(tf.logging.ERROR)
 
 COLUMNS = ["player","age","ws_3","mp_3","ws_2","mp_2","ws_1","mp_1","ws_target","mp_target"]
 
-FEATURES = ["age","ws_3","ws_2","ws_1", "avg", "proj_marcel"]
+FEATURES = ["age","ws_3","ws_2","ws_1", "avg", "proj_marcel", "mp_3", "mp_2", "mp_1"]
 
 #DEEP_FEATURES = ["ws_1", "ws_2", "ws_3", "avg", "age"]
 #WIDE_FEATURES = ["ws_1", "ws_2", "ws_3", "avg", "age" ] #, "mp_3", "mp_2", "mp_1"]
 
-DEEP_FEATURES = ["proj_marcel", "avg", "age"]
-WIDE_FEATURES = ["proj_marcel", "avg", "age" ] #, "mp_3", "mp_2", "mp_1"]
+DEEP_FEATURES = ["age","avg", "proj_marcel"]
+WIDE_FEATURES = ["age","avg", "proj_marcel"]
 
 LABEL = "ws_target"
 
@@ -35,18 +35,17 @@ def input_fn(data_set):
 
 def fit_and_eval_dnn(feature_cols, training_set, test_set, prediction_set, deep_cols, wide_cols):
 
+    learn_rate = 0.001
     regressor = tf.contrib.learn.DNNLinearCombinedRegressor(
         # common settings
         model_dir="tmp/nba_model",
         # wide settings
         linear_feature_columns=wide_cols,
-        #linear_optimizer=tf.train.RMSPropOptimizer(0.01),
-        linear_optimizer=tf.train.AdamOptimizer(0.0045),
+        linear_optimizer=tf.train.AdamOptimizer(learn_rate),
         # deep settings
         dnn_feature_columns=deep_cols,
-        dnn_hidden_units=[125, 64, 12],
-        #dnn_optimizer=tf.train.RMSPropOptimizer(0.01))
-        dnn_optimizer=tf.train.AdamOptimizer(0.0045))
+        dnn_hidden_units=[128, 64, 12, 10, 6, 3, 1],
+        dnn_optimizer=tf.train.AdamOptimizer(learn_rate))
 
     # Fit
     regressor.fit(input_fn=lambda: input_fn(training_set), steps=10000)

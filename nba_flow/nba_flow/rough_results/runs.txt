@@ -227,9 +227,62 @@ mae: 0.0288406068781
 
 ########################## Combined Model ###################################
 
+## Config 11 ##
 NN vars: ["proj_marcel", "avg", "age"]
+learn: 0.0045
+dnn_hidden_units=[125, 64, 12]
 
 DNN Performance
 Rsq: 0.727046204568
 rmse: 0.0360355859918
 mae: 0.0282622918474
+
+## Config 12 ##
+NN vars: ["proj_marcel", "avg", "age"]
+learn: 0.001
+dnn_hidden_units=[125, 64, 12]
+
+DNN Performance
+Rsq: 0.728576546787
+rmse: 0.0359530768245
+mae: 0.0281836099143
+
+## Config 13 ##
+NN vars: ["proj_marcel", "avg", "age"]
+learn: 0.0005
+dnn_hidden_units=[125, 64, 12]
+
+DNN Performance
+Rsq: 0.72665461905
+rmse: 0.0359801129621
+mae: 0.0282567796293
+
+## Config 14 ##
+NN vars: ["proj_marcel", "avg", "age"]
+learn: 0.001
+dnn_hidden_units=[250, 128, 24]
+
+DNN Performance
+Rsq: 0.72671869051
+rmse: 0.0360687641215
+mae: 0.0282961846781
+
+## Config 15 ##
+NN vars: ["proj_marcel", "avg", "age"]
+learn: 0.001
+dnn_hidden_units= [64, 32, 6]
+
+DNN Performance
+Rsq: 0.725725706878
+rmse: 0.0363455375472
+mae: 0.0285414047358
+
+## Config 16 ##
+NN vars: ["proj_marcel", "avg", "age"]
+learn: 0.001
+dnn_hidden_units= [128, 64, 12, 10, 6, 3, 1]
+
+DNN Performance
+Rsq: 0.727000680573
+rmse: 0.0360367871881
+mae: 0.0282638851037
