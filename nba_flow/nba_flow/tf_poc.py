@@ -15,8 +15,8 @@ COLUMNS = ["player","age","ws_3","mp_3","ws_2","mp_2","ws_1","mp_1","ws_target",
 
 FEATURES = ["age","ws_3","ws_2","ws_1", "avg"]
 
-DEEP_FEATURES = ["ws_1", "ws_2", "ws_3", "age", "avg"]
-WIDE_FEATURES = ["ws_1", "ws_2", "ws_3", "age", "avg" ] #, "mp_3", "mp_2", "mp_1"]
+DEEP_FEATURES = ["ws_1", "ws_2", "ws_3", "avg", "age"]
+WIDE_FEATURES = ["ws_1", "ws_2", "ws_3", "avg", "age" ] #, "mp_3", "mp_2", "mp_1"]
 
 LABEL = "ws_target"
 
@@ -35,15 +35,15 @@ def fit_and_eval_dnn(feature_cols, training_set, test_set, prediction_set, deep_
         # wide settings
         linear_feature_columns=wide_cols,
         #linear_optimizer=tf.train.RMSPropOptimizer(0.01),
-        linear_optimizer=tf.train.AdamOptimizer(0.01),
+        linear_optimizer=tf.train.AdamOptimizer(0.0045),
         # deep settings
         dnn_feature_columns=deep_cols,
-        dnn_hidden_units=[32, 16, 3],
+        dnn_hidden_units=[125, 64, 12],
         #dnn_optimizer=tf.train.RMSPropOptimizer(0.01))
-        dnn_optimizer=tf.train.AdamOptimizer(0.01))
+        dnn_optimizer=tf.train.AdamOptimizer(0.0045))
 
     # Fit
-    regressor.fit(input_fn=lambda: input_fn(training_set), steps=100000)
+    regressor.fit(input_fn=lambda: input_fn(training_set), steps=10000)
 
 
     # Score accuracy
@@ -108,8 +108,8 @@ def main(args):
     test_set['dnn_pred'] = dnn_preds
 
     ##### now using linear regressor
-    lin_reg_preds = fit_and_eval_linreg(feature_cols, training_set, test_set, prediction_set)
-    test_set['linreg_pred'] = lin_reg_preds
+    #lin_reg_preds = fit_and_eval_linreg(feature_cols, training_set, test_set, prediction_set)
+    #test_set['linreg_pred'] = lin_reg_preds
 
     projs = test_set[test_set.mp_target > 1000]
     pearson = projs['ws_target'].corr(projs['dnn_pred'])
@@ -123,16 +123,16 @@ def main(args):
     print ('rmse: {}'.format(rmse))
     print ('mae: {}'.format(mae))
 
-    pearson = projs['ws_target'].corr(projs['linreg_pred'])
-    mse = mean_squared_error(y_true=projs.ws_target, y_pred=projs.linreg_pred)
-    rmse = mse ** (0.5)
-    mae = mean_absolute_error(y_true=projs.ws_target, y_pred=projs.linreg_pred)
+    #pearson = projs['ws_target'].corr(projs['linreg_pred'])
+    #mse = mean_squared_error(y_true=projs.ws_target, y_pred=projs.linreg_pred)
+    #rmse = mse ** (0.5)
+    #mae = mean_absolute_error(y_true=projs.ws_target, y_pred=projs.linreg_pred)
 
-    print ('')
-    print ('Lin Reg Performance')
-    print ('Rsq: {}'.format(pearson))
-    print ('rmse: {}'.format(rmse))
-    print ('mae: {}'.format(mae))
+    #print ('')
+    #print ('Lin Reg Performance')
+    #print ('Rsq: {}'.format(pearson))
+    #print ('rmse: {}'.format(rmse))
+    #print ('mae: {}'.format(mae))
 
     test_set.to_csv('temp.csv')
     shutil.rmtree('tmp/nba_model')

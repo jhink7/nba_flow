@@ -32,23 +32,23 @@ print 'mae: {}'.format(mae)
 
 
 
-marcel = MarcelProjectionEngine(train, 'mp', 'ws', True, 1/48.0, False)
-projs = marcel.project_players(test)
-
-# only evaluate for players who played 1000 or more minutes the target year
-projs = projs[projs.mp_target > 1000]
-
-pearson = projs['ws_target'].corr(projs['proj_marcel'])
-mse = mean_squared_error(y_true = projs.ws_target, y_pred = projs.proj_marcel)
-rmse = mse**(0.5)
-mae = mean_absolute_error(y_true = projs.ws_target, y_pred = projs.proj_marcel)
-
-print ''
-print 'Smarter Marcel Performance'
-print 'Rsq: {}'.format(pearson)
-print 'rmse: {}'.format(rmse)
-print 'mae: {}'.format(mae)
-
-
-#projs.to_csv('temp.csv')
+# marcel = MarcelProjectionEngine(train, 'mp', 'ws', True, 1/48.0, False)
+# projs = marcel.project_players(test)
+#
+# # only evaluate for players who played 1000 or more minutes the target year
+# projs = projs[projs.mp_target > 1000]
+#
+# pearson = projs['ws_target'].corr(projs['proj_marcel'])
+# mse = mean_squared_error(y_true = projs.ws_target, y_pred = projs.proj_marcel)
+# rmse = mse**(0.5)
+# mae = mean_absolute_error(y_true = projs.ws_target, y_pred = projs.proj_marcel)
+#
+# print ''
+# print 'Smarter Marcel Performance'
+# print 'Rsq: {}'.format(pearson)
+# print 'rmse: {}'.format(rmse)
+# print 'mae: {}'.format(mae)
+#
+#
+# projs.to_csv('temp.csv')
 

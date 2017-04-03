@@ -177,9 +177,10 @@ mae: 0.0291123433779
         #dnn_optimizer=tf.train.RMSPropOptimizer(0.01))
         dnn_optimizer=tf.train.AdamOptimizer(0.0045))
 
-Rsq: 0.688661691368
-rmse: 0.0381206965362
-mae: 0.0291099089674
+DNN Performance
+Rsq: 0.690616328014
+rmse: 0.0381398151225
+mae: 0.0288261307371
 
 
 ## Config 9 ## (age: wide, avg: deep)
@@ -223,3 +224,12 @@ mae: 0.028826336115
 Rsq: 0.690682434038
 rmse: 0.0381733127353
 mae: 0.0288406068781
+
+########################## Combined Model ###################################
+
+NN vars: ["proj_marcel", "avg", "age"]
+
+DNN Performance
+Rsq: 0.727046204568
+rmse: 0.0360355859918
+mae: 0.0282622918474
