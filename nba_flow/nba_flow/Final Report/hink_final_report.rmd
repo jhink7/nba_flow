@@ -135,19 +135,63 @@ A class of machine learning algorithms that use many layers of nonlinear process
 #### Data Source
 
 #### Technology Used
-The code for the project was developed entirely in Python.  The well established libraries for data wrangling (Pandas, numpy) and sampling from statisical distributions made this a logical choice for coding up this sort of prototype.  
+The code for the project was developed entirely in Python.  The well established libraries for data wrangling (Pandas, numpy, TensorFlow), building neural networks and analyzing results made this a logical choice for coding up this sort of prototype.  
 
 There was no need for persistent storage other than saving simulation results.  Simple CSV files were used for this purpose.
 
+All training runs of the models in this project were built on a machine with the following specifications.  Note, GPU information is not included as TensorFlow's GPU extensions were not utilized for this project.  Re-running the models on a box with these extensions enabled will be left for future work.
+
+Spec        |     Value
+------------|---------------------------
+CPU Cores   |      4 physical, 8 logical
+CPU Clock   |      2.8 GHz
+CPU Model   |      Intel Core i7-4900MQ
+RAM         |      24 GB
+OS (Host)   |      Windows 8.1
+OS (VM)     |      Ubuntu 16.04.1 LTS
+Hypervisor  |      VMWare Workstation
+
 # Results
 
-#### Marcel
+TODO
 
-#### Trained Marcel
+### Marcel
 
-#### Pure Neural Network
+TODO
 
-#### Seeded Neural Network
+Eval Metric   |        Value
+--------------|-----------------------
+R-squared     |       0.7242
+RMSE          |       0.0370
+MAE           |       0.0291
+
+### Trained Marcel
+
+TODO
+
+Eval Metric   |        Value
+--------------|-----------------------
+R-squared     |       0.7236
+RMSE          |       0.0375
+MAE           |       0.0296
+
+### Pure Neural Network
+
+TODO
+
+```{r, message=FALSE, echo=FALSE}
+dfPNNResults = read.csv('raw_runs_nn.csv')
+kable(dfPNNResults)
+```
+
+### Seeded Neural Network
+
+TODO
+
+```{r, message=FALSE, echo=FALSE}
+dfMNNResults = read.csv('raw_runs_mixed.csv')
+kable(dfMNNResults)
+```
 
 # Future Work
 
