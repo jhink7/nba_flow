@@ -112,11 +112,11 @@ $$
 \end{aligned}
 $$
 
-While Tango published the algorithm, he does not want to take credit for the results it produces.  Rather he prefers the algorithm to be used as a baseline for projection systems to use as a measuring stick.   
+While Tango published the algorithm, he does not want to take credit for the results it produces.  Rather he prefers the algorithm to be used as a baseline for projection systems to use as a measuring stick.  [CITATION]  
 
 #### Win Shares
 
-A statistical concept originally developed by Bill James in the 1980s in his Baseball Abstracts, Win Shares attmpt to assign credit/blame to individual player for their team's performance.  
+A statistical concept originally developed by Bill James in the 1980s in his Baseball Abstracts, Win Shares attmpt to assign credit/blame to individual player for their team's performance. [CITATION]   
 
 #### Neural Network
 
@@ -124,30 +124,192 @@ A class of computation models that utilize a large collection of simple neural u
 
 #### Deep Learning
 
-A class of machine learning algorithms that use many layers of nonlinear processing units for model feature extraction and transformation.  Output from one layer of the network is fed into the next as input.  High level model features are derivd from lower level features and create an overall hierarchical representation. [cite wiki]
+A class of machine learning algorithms that use many layers of nonlinear processing units for model feature extraction and transformation.  Output from one layer of the network is fed into the next as input.  High level model features are derived from lower level features and create an overall hierarchical representation. [CITATION wiki] 
 
 \pagebreak
 
+# Introduction
+
+For this MS in Data Analytics Capstone project, I built and evaluated a number of projection algorithms for player level events in the National Basketball Association (NBA hereafter). The project establishes a baseline level of efficacy for a projection system using a technique similar to that found in the baseball analytics world known as "Marcel the Monkey Forecasting System" [CITATION  proposal] and then attempt to move past that simple system's performance with more advanced techniques.
+
+For these more advanced techniques, Google's popular and fast growing TensorFlow [CITATION proposal] machine learning library was used. Having not had the opportunity to use the library for a real project to date and this was the perfect opportunity for me to gain experience with it.
+
+The metric Win Shares per 48 minutes has been chosen as the metric of study.  It is one of modern basketball analytics best attempts to encapsulate player value in a singular number.  Effectively projecting this value for individual players in future seasons is the overarching goal of the project.
+
 # Methodology
 
-#### General Approach
+## Data Source
 
-Description of Marcel
+All of the data in this project was gathered from BasketballReference.com [CITATION].  Player data was gathered for the 1995/1996 through 2015/2016 seasons.  
+
+## Data Preparation
+
+The data for this project was gathered using custom html scraping code.  The code took advantage of the BeautifulSoup and Pandas libraries for this task.  
+
+Once downloaded, the data was transformed to a familiar tabular format which would be useful to build all of the following projection models.  A sample of this transformed data follows.
+
 \begin{center}
-```{r, out.width = "350px", echo=FALSE}
+```{r, out.width = "450px", echo=FALSE}
+knitr::include_graphics("data_sample.png")
+```
+\end{center}
+
+The "ws_" variables represent win share per 48 minute values.  The "mp_" variables represent total minutes played for a player in a given year.  The numeric postfix represents how many years away the data was gathered from the target projection year.  For example, ws_3 and mp_3 represent win share and minutes played values from 3 years prior to the projection year.  The age variable represents the age of the player for the target projection year.  In the above sample, this means that A.C. Green was 34 years old in the season that he posted 0.095 win shares per 48 minutes of playing time.
+
+Variable | Type                  |  Predictor/Target
+---------|-----------------------|-------------------
+ws_3     |  Numeric, Continuous  |   Predictor
+ws_2     |  Numeric, Continuous  |   Predictor
+ws_1     |  Numeric, Continuous  |   Predictor
+mp_3     |  Numeric, Continuous  |   Predictor
+mp_2     |  Numeric, Continuous  |   Predictor
+mp_1     |  Numeric, Continuous  |   Predictor
+mp_target|  Numeric, Continuous  |   Target
+ws_target|  Numeric, Continuous  |   Target
+
+Table:  Variable Summary
+
+For all of the algorithms in the following section, the goal is to predict target win shares accurately based on past performance, playing time and age.
+
+To ensure that all testing was of algorithm performance was done out of sample, the data was split into training and test sets.  The training data was used to build the algorithms and tune their various settings while the test data set was left for final testing and evaluation.  In total there were 3272 records in the training data set and 1403 records in the test data set, all in the format of the above sample.
+
+The code used to extract, transform and load this data can be found in the GitHub repository listed in Appendix A.
+
+## Description of Algorithms
+
+### Algorithm 1: "Marcel"
+
+The first algorithm implemented in this project is an adaptation of the Marcel forecasting system that was developed for baseball. Marcel is a very basic system that nonetheless performs well in tests against more advanced systems. The first algorithm in this project can be thought of as the first logical pass at Marcel when applied to basketball.  For each of the Marcel-style projections there are four general steps, which are explained below.
+
+#### Weighted average of past years' outcomes
+
+The first step is to calculate a weighted average of each player's past outcomes, with more weight given to the most recent data. Four years of data are used, and the relative weights applied to each year are determined by fitting against historical data out of sample.
+
+#### Regression towards the mean
+
+The second step is to apply regression towards the mean to account for the role of luck in past outcomes. Since a player's past outcomes are the sum of their talent and luck (a catch-all term that we're just using to mean all factors outside of the player's control), if a player's outcomes were above average we expect that he both had above average talent and above average luck, and vice-versa. Since only the talent part is expected to persist into the future (all players are expected to have average luck going forward), we should expect players whose past outcomes were above league average to on average have worse outcomes in the future (but still above league average), and we should expect players whose past outcomes were below league average to on average have better outcomes in the future (but still below league average).
+
+The following graphs illustrate regression towards the mean in action. The graphs were generated using hockey data from a previous project of mine in this degree but the illustration of the core concept is wholly relevant to domains other than hockey. [CITATION]  The first graph shows even strength points per 60 minutes for all forwards that played at least 500 even strength minutes in both the 2010-2011 and 2011-2012 seasons. The red line represents the best-fit for predicting a player's year 2 points per 60 given their year 1 points per 60. The black line is where year 2 points equals year 1 points.
+
+\begin{center}
+```{r, out.width = "250px", echo=FALSE}
 knitr::include_graphics("rttm1.jpg")
 ```
 \end{center}
 
+Note that the red line has a shallower slope than the black line, and in particular that the red line falls below the black line when year 1 points per 60 is above average, and falls above the black line when year 1 points per 60 is below average. This shows that players who were above average in 2010-2011 tended to be less above average in 2011-2012, and those who were below average in 2010-2011 tended to be less below average in 2011-2012. This is exactly the expected pattern.
+
+Now, let's see what happens when regression towards the mean is applied to the 2010-2011 statistics by adding 730 minutes of league average outcomes to each player's value:
+
 \begin{center}
-```{r, out.width = "350px", echo=FALSE}
+```{r, out.width = "250px", echo=FALSE}
 knitr::include_graphics("rttm2.jpg")
 ```
 \end{center}
 
-#### Data Source
+Now the red line matches the black line (at least, the slope is the same - the reason it's slightly below the black line is because overall scoring for these players went down slightly from 2010-2011 to 2011-2012). Note that the year 1 statistics are now compressed into a smaller range than in the previous graph. That's what happens when regression towards the mean is applied - to account for the role of luck in past outcomes, the measured results get pulled back towards the mean, with the most extreme values being pulled back the most.
 
-#### Technology Used
+#### Aging adjustment
+
+The last step of the core projection engine is to apply an aging adjustment to account for the fact that young players tend to improve and old players tend to get worse. Advanced methods here are worthy of their own capstone project. Marcel, being the simplest possible system, elects to use a rudimentary heuristic here that ends up working quite well.  The heuristic is simple, if a player is younger than 28 years of age, boost their age-agnostic projection by 0.4% times the number of years younger than 28.  For example, if a player is 22 years old and their age-agnostic projection came out to be 0.150 WS/48 mins, their age adjusted projection would be calculated as:
+
+$$
+\begin{aligned}
+{ Proj }_{ age-adj }=(0.15)*(1\quad +\quad (28-22)*0.004)\quad =\quad 0.1536
+\end{aligned}
+$$
+
+Conversely, if the player is 28 years of age or older, penalize their age-agnostic projection by 0.2% per year older than 28.
+
+While the core Marcel algorithm is not new to this project, the implementation is.  The core bit of python code used to drive this type of projection can be viewed below:
+
+```{python, eval=FALSE}
+    def weight_rttm_age(self, row):
+        mp_sum = 6 * row['mp_3'] + 3 * row['mp_2'] + 1 * row['mp_3']
+
+        w1 = self.weights[0]
+        w2 = self.weights[1]
+        w3 = self.weights[2]
+        regk = 1000.0 # 1000 minutes
+
+        # calculate a weighted average
+        temp = ((row['ws_1'] * row['mp_1'] * w1 +  row['ws_2'] * row['mp_2'] * w2 
+                  + row['ws_3'] * row['mp_3'] * w3) 
+                / (row['mp_1'] * w1 + row['mp_2'] * w2 + row['mp_3'] * w3))
+
+        # apply regression towards the mean
+        # akin to naive bayes with a weakly informative prior
+        retval =  ((temp * (row['mp_1'] * w1 + row['mp_2'] * w2 + row['mp_3'] * w3) 
+                      + regk * self.AVG) 
+                   / (regk + (row['mp_1'] * w1 + row['mp_2'] * w2 + row['mp_3'] * w3)))
+
+        # simple aging adjustment
+        if row['age'] < 28:
+            retval = retval * (1 + (28 - row['age']) * 0.004)
+        elif row['age'] > 28:
+            retval = retval * (1 + (28 - row['age']) * 0.002)
+            
+        return retval
+
+    def project_players(self, test_data):
+        test_data['proj_marcel'] = test_data.apply(self.weight_rttm_age, axis=1)
+        return test_data
+```
+
+One important note here is that the defaults for the weighting of past year's performance are as follows (where N is the year the projection is to be built for):
+
+Year  |  Weight
+------|---------
+N-1   |   6.0
+N-2   |   3.0
+N-3   |   1.0
+
+With a pure Marcel approach, these weights are essentially chosen from intuition alone.  It makes sense that performance from one year ago should be weighted more heavily than performance from 2 years ago when attempting to determine current talent levels/future performance.  The weights in the above table are chosen as such.
+
+### Algorithm 2: "Trained Marcel"
+
+The second algorithm developed in this project is a small extension to the core Marcel framework.  Instead of using semi-random/intuition-driven coefficients for the weighting portion of the algorithm, an initial first pass over the training data set is performed to derive these weights.  The first pass is a simple ordinary least square (OLS) regression and outputs recommended coefficients for each of the previous year's past performance.  These coefficients are then used in the subsequent core Marcel pass over the data instead of the weights in the table from the previous section.
+
+The python snippet that implements this simple modification looks as follows:
+
+```{python, eval=FALSE}
+    # Note, the following is in the constructor of the main projection class
+    if not use_default_weights:
+        model = ols("ws_target ~ ws_1 + ws_2 + ws_3 + 1", train_data).fit()
+        self.weights[0] = model._results.params[1] * 1
+        self.weights[1] = model._results.params[2] * 1
+        self.weights[2] = model._results.params[3] * 1
+```
+
+### Algorithm 3:  "Wide and Deep Learning"
+
+The third approach taken in this project is a significant departure in methodology from the methods described in the two previous sections.  A neural network approach to projecting future player level outcomes was developed. The general structure of a neural network in the context of performing regression like behavior looks as follows: [CITATION] 
+
+\begin{center}
+```{r, out.width = "250px", echo=FALSE}
+knitr::include_graphics("mlp.png")
+```
+\end{center}
+
+High level model features are derived from lower level features and create an overall hierarchical model that can be used to predict target values.  In the context of this project, the features fed in to the lower levels of the model are things like win shares and playing time (in minutes played) for past seasons as well as the player's age.  The output is the prediction of win share performance for the target seasson.
+
+In order to take on this complicated task, Google's TensorFlow library was used extensively.  Tensorflow provides high level APIs that make training and using this class of model much simpler than it would be if the core training logic needed to be developed from scratch.  The models built with Tensorflow provide a number of tunable knobs and dials.  These include things such as model learning rate, number of hidden layers included in the model and the optimization algorithm used as part of both the deep and wide learning portions of the model's training.  Throughout this portion of the project, a number of these tunable values were adjuted and their effect on model performance was examined. 
+
+### Algorithm 4:  "Marcel Net"
+
+The final model that was developed for this project is a hybrid of the Marcel and Neural Network approaches described above.  In this algorithm, a set of Marcel projections are generated.  These intermediate projections along with player ages and league averages are then input to a wide and deep neural network for further training.
+
+\begin{center}
+```{r, out.width = "250px", echo=FALSE}
+knitr::include_graphics("hybrid_model.png")
+```
+\end{center}
+
+The entire code listing for generating all of the above models can be found in the GitHub repository listed in the appendices.
+
+## Data Source
+
+## Technology Used
 The code for the project was developed entirely in Python.  The well established libraries for data wrangling (Pandas, numpy, TensorFlow), building neural networks and analyzing results made this a logical choice for coding up this sort of prototype.  
 
 There was no need for persistent storage other than saving simulation results.  Simple CSV files were used for this purpose.
@@ -226,4 +388,6 @@ Ultimately, the choice of algorithm would depend on use case.  If projection acc
 
 # References
 
+# Appendix A:  Code Repository
 
+https://github.com/jhink7/nba_flow
