@@ -44,7 +44,7 @@ def fit_and_eval_dnn(feature_cols, training_set, test_set, prediction_set, deep_
         linear_optimizer=tf.train.AdamOptimizer(learn_rate),
         # deep settings
         dnn_feature_columns=deep_cols,
-        dnn_hidden_units=[128, 64, 12, 10, 6, 3, 1],
+        dnn_hidden_units=[125, 64, 12],
         dnn_optimizer=tf.train.AdamOptimizer(learn_rate))
 
     # Fit
@@ -128,20 +128,22 @@ def main(args):
                                                    marcel_stage_test_projs)
 
     #marcel_stage_test_projs.reset_index()
-    marcel_stage_test_projs['dnn_pred'] = post_dnn_stage_preds
+    marcel_stage_test_projs['hybrid_pred'] = post_dnn_stage_preds
     time.sleep(1)
 
     projs = marcel_stage_test_projs[marcel_stage_test_projs.mp_target > 1000]
-    pearson = projs['ws_target'].corr(projs['dnn_pred'])
-    mse = mean_squared_error(y_true=projs.ws_target, y_pred=projs.dnn_pred)
+    pearson = projs['ws_target'].corr(projs['hybrid_pred'])
+    mse = mean_squared_error(y_true=projs.ws_target, y_pred=projs.hybrid_pred)
     rmse = mse ** (0.5)
-    mae = mean_absolute_error(y_true=projs.ws_target, y_pred=projs.dnn_pred)
+    mae = mean_absolute_error(y_true=projs.ws_target, y_pred=projs.hybrid_pred)
 
     print ('')
-    print ('DNN Performance')
+    print ('Hybrid Performance')
     print ('Rsq: {}'.format(pearson))
     print ('rmse: {}'.format(rmse))
     print ('mae: {}'.format(mae))
+
+    projs.to_csv('hybrid_projs.csv')
 
     shutil.rmtree('tmp/nba_model')
 
