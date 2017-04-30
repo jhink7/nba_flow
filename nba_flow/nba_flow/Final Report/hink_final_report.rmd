@@ -132,6 +132,19 @@ A class of machine learning algorithms that use many layers of nonlinear process
 
 #### General Approach
 
+Description of Marcel
+\begin{center}
+```{r, out.width = "350px", echo=FALSE}
+knitr::include_graphics("rttm1.jpg")
+```
+\end{center}
+
+\begin{center}
+```{r, out.width = "350px", echo=FALSE}
+knitr::include_graphics("rttm2.jpg")
+```
+\end{center}
+
 #### Data Source
 
 #### Technology Used
@@ -195,7 +208,21 @@ kable(dfMNNResults)
 
 # Future Work
 
+The methods developed throughout this project should be general enough such that holistic measures of value other than Win Shares can be projected.  For example, popular metrics such as Value Over Replacement Player (VORP) and Wins Above Replacement (WAR) should be projectable to a reasonable degree with both a pure Marcel approach and a Marcel/Deep Learning hybrid algorithm.  Examining how effective the various methods are at projecting each metric would be an interesting project.
+
+A deeper dive into creating a truly useful projection system for NBA players would involving projecting each individual component statistic that goes into the win share calculation.  The first step down this path would be to project defensive (DWS) and offensive (OWS) win shares separately and then adding these together to create the overall Win Share projection.  Logically, this can be extended further by first calculating individual components of DWS and OWS and then combining these projections into intermediate DWS and OWS which can then be added to give a final, more accurate (theoretically) overall Win Shares projection.
+
+While this remains an untested hypothesis for basketball projections, this method of componentized projection has worked well for me in the past when building projection systems for other sports.  For example, in hockey, projecting an individual's goal scoring rate (in goals per game or goals per minute) is easy enough to do directly.  Using a Marcel based system, taking a weighted average of the target player's last 3 seasons goal rates and regressing that to the mean an appropriate amount will yield a decent amount of predictive power.  However, large gains are made as soon as the goal rate projection is broken up into multiple sub projections.  For goals, predicting a player's shot rate (the number of shots they take on goal per game or minute) and predicting their shooting percentage (rate of shots that become goals) separately and then combining together for an overall goal rate projection yields a substantial improvement.  Breaking each projection down based on basic game context (Even Strength, Powerplay, Shorthanded) improves the method even further and does not meander into the realm of overfitting. 
+
+My professional work in baseball has shown similar results to the above hockey example.  Projecting a measure like weighted on base average (wOBA) is simple enough and will provide a decent estimate of a player's overall batting skill.  It is easily improved upon however, as soon as you start projecting component parts such as homerun per fly ball rate, ground ball rate, strikeout rate and walk rate separately.
+
 # Conclusion
+
+This project set out to examine the efficacy of multiple algorithms for projecting future NBA player level performance.  A total of 4 algorithms were examined with three of them heavily borrowing logic from the well established Marcel the Monkey projection system which originated in the baseball analytics community.  
+
+The most advanced system combined a pure Marcel approach (weighted time average plus regression to the mean) with a wide and deep neural network.  This hybrid approach achieved superior performance compared to systems using Marcel or neural networks alone.  The one significant downside of any of the algorithms leveraging a neural network was the training time and computing power needed when compared to a pure Marcel approach.  The neural network based algorithms required orders of magnitude greater compute time to complete.  
+
+Ultimately, the choice of algorithm would depend on use case.  If projection accuracy was the motivating decision variable, the hybrid system developed here provides that.  But if the algorithm needs to be run and updated multiple times per minute, the amount of computing power required may become prohibitive (depending on budget of course).  The Marcel system runs very quickly, has minimal code and library dependencies and is in the same realm accuracy wise as the more complicated systems. It may very well be the correct choice in some situations.
 
 # References
 
