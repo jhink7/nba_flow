@@ -336,7 +336,7 @@ TODO
 
 Eval Metric   |        Value
 --------------|-----------------------
-R-squared     |       0.7242
+R             |       0.7242
 RMSE          |       0.0370
 MAE           |       0.0291
 
@@ -346,7 +346,7 @@ TODO
 
 Eval Metric   |        Value
 --------------|-----------------------
-R-squared     |       0.7236
+R             |       0.7236
 RMSE          |       0.0375
 MAE           |       0.0296
 
@@ -359,13 +359,44 @@ dfPNNResults = read.csv('raw_runs_nn.csv')
 kable(dfPNNResults)
 ```
 
-### Seeded Neural Network
+### Marcel Net
 
 TODO
 
 ```{r, message=FALSE, echo=FALSE}
 dfMNNResults = read.csv('raw_runs_mixed.csv')
 kable(dfMNNResults)
+```
+
+```{r, message=FALSE, echo=FALSE,fig.height=2.75, fig.width=7.5}
+dfHybrid = read.csv('hybrid_projs.csv')
+
+dfHybrid$residuals <- dfHybrid$ws_target - dfHybrid$hybrid_pred
+
+ggplot() + aes(dfHybrid$residuals)+ geom_histogram(binwidth=0.01225, colour="black", fill="white") +
+  labs(x="residuals") + ggtitle("Projection Residuals")
+```
+
+```{r, message=FALSE, echo=FALSE,fig.height=2.75, fig.width=7.5}
+qqplot.data <- function (vec) # argument: vector of numbers
+{
+  # following four lines from base R's qqline()
+  y <- quantile(vec[!is.na(vec)], c(0.25, 0.75))
+  x <- qnorm(c(0.25, 0.75))
+  slope <- diff(y)/diff(x)
+  int <- y[1L] - slope * x[1L]
+
+  d <- data.frame(resids = vec)
+
+  ggplot(d, aes(sample = resids)) + stat_qq() + geom_abline(slope = slope, intercept = int) + ggtitle("Projection QQ Plot")
+
+}
+
+qqplot.data(dfHybrid$residuals)
+```
+
+```{r, message=FALSE, echo=FALSE,fig.height=4.75, fig.width=7.5}
+ggplot(dfHybrid,aes(dfHybrid$residuals)) + geom_histogram(binwidth=0.01225, colour="black", fill="white") + facet_wrap(~age) + ggtitle("Projection Residuals by Age")
 ```
 
 # Future Work
