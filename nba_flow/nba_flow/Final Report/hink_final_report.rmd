@@ -58,14 +58,75 @@ multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
   }
 }
 
-#homeice <- bibentry(bibtype="Misc",
-#                         author=person(family="Yue", first="Wesley"),
-#                         publisher="Hockey Metrics",
-#                         title="Home Ice Advantage",
-#                         year=2013,
-#                         month="December",
-#                         url="http://hockeymetrics.net/home-ice-advantage/")
+bbreff <- bibentry(bibtype="Misc",
+                         author=person(family="Kubatko", first="Justin"),
+                         publisher="Basketball Reference",
+                         title="Basketball Reference",
+                         year=2017,
+                         month="May",
+                         url="http://www.basketball-reference.com/")
 
+deepLearning <- bibentry(bibtype="Misc",
+                         author=personList(person(family="Deng", first="Li"), person(family="Yu", first="Dong")),
+                         publisher="NOW Publishers",
+                         title="Deep Learning: Methods and Applications",
+                         year=2014,
+                         month="May",
+                         url="https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/DeepLearning-NowPublishing-Vol7-SIG-039.pdf")
+
+winShares <- bibentry(bibtype="Misc",
+                         author=person(family="James", first="Bill"),
+                         publisher="STATS Publishing Inc",
+                         title="Win Shares",
+                         year=2002,
+                         month="February")
+
+marcelTheMatrix <- bibentry(bibtype="Misc",
+                         author=person(family="Baumer", first="Ben"),
+                         publisher="Baseball With R",
+                         title="Marcel The Matrix",
+                         year=2014,
+                         month="June",
+                         url="https://baseballwithr.wordpress.com/2014/06/25/marcel-the-matrix/")
+
+tango <- bibentry(bibtype="Misc",
+                         author=person(family="Tango", first="Tom"),
+                         publisher="tangotiger.net",
+                         title="Marcel 2012",
+                         year=2012,
+                         month="June",
+                         url="http://www.tangotiger.net/marcel/")
+
+hink <- bibentry(bibtype="Misc",
+                         author=person(family="Hink", first="Justin"),
+                         #publisher="tangotiger.net",
+                         title="DraftKings and FanDuel Hockey Visualizations",
+                         year=2015,
+                         month="May",
+                         url="http://jlaurito.github.io/CUNY_IS608/2015spring/hink/Deployment/Description.html")
+
+tflow <- bibentry(bibtype="Misc",
+                         author=person(family="Google"),
+                         title="An open-source software library for Machine Intelligence",
+                         year=2017,
+                         month="May",
+                         url="https://www.tensorflow.org/")
+
+mlpDiagram <- bibentry(bibtype="Misc",
+                         author=personList(person(family="Moreno", first="Juan José Montaño"), person(family="Pol", first="Alfonso"), person(family="Gracia", first="Pilar")),
+                         publisher="Psicothema",
+                         title="Artificial neural networks applied to forecasting time series",
+                         year=2011,
+                         month="September",
+                         url="http://www.psicothema.com/pdf/3889.pdf")
+
+adam <- bibentry(bibtype="Misc",
+                         author=personList(person(family="Kingma", first="Diederik"), person(family="Ba", first="Jimmy")),
+                         publisher="arXiv",
+                         title="Adam: A Method for Stochastic Optimization",
+                         year=2014,
+                         month="December",
+                         url="https://arxiv.org/abs/1412.6980")
 
 ```
 
@@ -104,7 +165,7 @@ An algorithm, or set of algorithms, that attempt to predict future outcomes.  Th
 
 #### Marcel
 
-Originally developed for baseball but wholly relevant for other sports, Marcel is very simple but effective system developed and published by renowned baseball analyst, Tom Tango (an alias, his real name is not available in the public domain).  The system gets it's name from a pet monkey named Marcel and the fact that the algorithm is so simple that a monkey should be able to develop and understand it.  The mathematical form of the algorithm is as follows [cite blog post]:
+Originally developed for baseball but wholly relevant for other sports, Marcel is very simple but effective system developed and published by renowned baseball analyst, Tom Tango (an alias, his real name is not available in the public domain).  The system gets it's name from a pet monkey named Marcel and the fact that the algorithm is so simple that a monkey should be able to develop and understand it.  The mathematical form of the algorithm is as follows `r citep(marcelTheMatrix)`:
 
 $$
 \begin{aligned}
@@ -112,11 +173,11 @@ $$
 \end{aligned}
 $$
 
-While Tango published the algorithm, he does not want to take credit for the results it produces.  Rather he prefers the algorithm to be used as a baseline for projection systems to use as a measuring stick.  [CITATION]  
+While Tango published the algorithm, he does not want to take credit for the results it produces.  Rather he prefers the algorithm to be used as a baseline for projection systems to use as a measuring stick.  `r citep(tango)`  
 
 #### Win Shares
 
-A statistical concept originally developed by Bill James in the 1980s in his Baseball Abstracts, Win Shares attmpt to assign credit/blame to individual player for their team's performance. [CITATION]   
+A statistical concept originally developed by Bill James in his writings about baseball analytics, Win Shares attmpt to assign credit/blame to individual player for their team's performance. `r citep(winShares)`   
 
 #### Neural Network
 
@@ -124,23 +185,25 @@ A class of computation models that utilize a large collection of simple neural u
 
 #### Deep Learning
 
-A class of machine learning algorithms that use many layers of nonlinear processing units for model feature extraction and transformation.  Output from one layer of the network is fed into the next as input.  High level model features are derived from lower level features and create an overall hierarchical representation. [CITATION wiki] 
+A class of machine learning algorithms that use many layers of nonlinear processing units for model feature extraction and transformation.  Output from one layer of the network is fed into the next as input.  High level model features are derived from lower level features and create an overall hierarchical representation. `r citep(deepLearning)` 
 
 \pagebreak
 
 # Introduction
 
-For this MS in Data Analytics Capstone project, I built and evaluated a number of projection algorithms for player level events in the National Basketball Association (NBA hereafter). The project establishes a baseline level of efficacy for a projection system using a technique similar to that found in the baseball analytics world known as "Marcel the Monkey Forecasting System" [CITATION  proposal] and then attempt to move past that simple system's performance with more advanced techniques.
+For this MS in Data Analytics Capstone project, I built and evaluated a number of projection algorithms for player level events in the National Basketball Association (NBA hereafter). The project establishes a baseline level of efficacy for a projection system using a technique similar to that found in the baseball analytics world known as "Marcel the Monkey Forecasting System" and then attempt to move past that simple system's performance with more advanced techniques.
 
-For these more advanced techniques, Google's popular and fast growing TensorFlow [CITATION proposal] machine learning library was used. Having not had the opportunity to use the library for a real project to date and this was the perfect opportunity for me to gain experience with it.
+For these more advanced techniques, Google's popular and fast growing TensorFlow `r citep(tflow)`  machine learning library was used. Having not had the opportunity to use the library for a real project to date and this was the perfect opportunity for me to gain experience with it.
 
 The metric Win Shares per 48 minutes has been chosen as the metric of study.  It is one of modern basketball analytics best attempts to encapsulate player value in a singular number.  Effectively projecting this value for individual players in future seasons is the overarching goal of the project.
+
+The models built in this project are most applicable to veteran players.  That is, players with at least 3 partial years of NBA playing time.  Projecting rookies and young players is a more complex task which involves gathering college data, translating that information to NBA level performance and taking into account "softer" data points such as draft position and physical attributes.  Building this type of model for young, non-veteran players is out of scope for this project.  
 
 # Methodology
 
 ## Data Source
 
-All of the data in this project was gathered from BasketballReference.com [CITATION].  Player data was gathered for the 1995/1996 through 2015/2016 seasons.  
+All of the data in this project was gathered from BasketballReference.com `r citep(bbreff)`.  Player data was gathered for the 1995/1996 through 2015/2016 seasons.  
 
 ## Data Preparation
 
@@ -154,7 +217,7 @@ knitr::include_graphics("data_sample.png")
 ```
 \end{center}
 
-The "ws_" variables represent win share per 48 minute values.  The "mp_" variables represent total minutes played for a player in a given year.  The numeric postfix represents how many years away the data was gathered from the target projection year.  For example, ws_3 and mp_3 represent win share and minutes played values from 3 years prior to the projection year.  The age variable represents the age of the player for the target projection year.  In the above sample, this means that A.C. Green was 34 years old in the season that he posted 0.095 win shares per 48 minutes of playing time.
+The "ws_" variables represent win share per 48 minute values.  The "mp_" variables represent total minutes played for a player in a given year.  The numeric postfix represents how many years away the data was gathered from the target projection year.  For example, ws_3 and mp_3 represent win share and minutes played values from 3 years prior to the projection year.  The age variable represents the age of the player for the target projection year.  In the above sample, this means that A.C. Green was 34 years old in the season that he posted 0.095 win shares per 48 minutes of playing time.  Only sets of complete data were gathered for our training and evaluation sets.  That is, if a player did not play in 1 or more of a 4 season span, their data record was excluded.  Note, this will include all players who have less than 3 full years of experience in the league.
 
 Variable | Type                  |  Predictor/Target
 ---------|-----------------------|-------------------
@@ -189,7 +252,7 @@ The first step is to calculate a weighted average of each player's past outcomes
 
 The second step is to apply regression towards the mean to account for the role of luck in past outcomes. Since a player's past outcomes are the sum of their talent and luck (a catch-all term that we're just using to mean all factors outside of the player's control), if a player's outcomes were above average we expect that he both had above average talent and above average luck, and vice-versa. Since only the talent part is expected to persist into the future (all players are expected to have average luck going forward), we should expect players whose past outcomes were above league average to on average have worse outcomes in the future (but still above league average), and we should expect players whose past outcomes were below league average to on average have better outcomes in the future (but still below league average).
 
-The following graphs illustrate regression towards the mean in action. The graphs were generated using hockey data from a previous project of mine in this degree but the illustration of the core concept is wholly relevant to domains other than hockey. [CITATION]  The first graph shows even strength points per 60 minutes for all forwards that played at least 500 even strength minutes in both the 2010-2011 and 2011-2012 seasons. The red line represents the best-fit for predicting a player's year 2 points per 60 given their year 1 points per 60. The black line is where year 2 points equals year 1 points.
+The following graphs illustrate regression towards the mean in action. The graphs were generated using hockey data from a previous project of mine in this degree but the illustration of the core concept is wholly relevant to domains other than hockey. `r citep(hink)`   The first graph shows even strength points per 60 minutes for all forwards that played at least 500 even strength minutes in both the 2010-2011 and 2011-2012 seasons. The red line represents the best-fit for predicting a player's year 2 points per 60 given their year 1 points per 60. The black line is where year 2 points equals year 1 points.
 
 \begin{center}
 ```{r, out.width = "250px", echo=FALSE}
@@ -266,6 +329,8 @@ N-3   |   1.0
 
 With a pure Marcel approach, these weights are essentially chosen from intuition alone.  It makes sense that performance from one year ago should be weighted more heavily than performance from 2 years ago when attempting to determine current talent levels/future performance.  The weights in the above table are chosen as such.
 
+As mentioned previously, the projection models compared in this project exclude rookies entirely.  However, if one were to use Marcel to project a rookie player, they would receive a projection that is exactly equal to the league average.
+
 ### Algorithm 2: "Trained Marcel"
 
 The second algorithm developed in this project is a small extension to the core Marcel framework.  Instead of using semi-random/intuition-driven coefficients for the weighting portion of the algorithm, an initial first pass over the training data set is performed to derive these weights.  The first pass is a simple ordinary least square (OLS) regression and outputs recommended coefficients for each of the previous year's past performance.  These coefficients are then used in the subsequent core Marcel pass over the data instead of the weights in the table from the previous section.
@@ -283,7 +348,7 @@ The python snippet that implements this simple modification looks as follows:
 
 ### Algorithm 3:  "Wide and Deep Learning"
 
-The third approach taken in this project is a significant departure in methodology from the methods described in the two previous sections.  A neural network approach to projecting future player level outcomes was developed. The general structure of a neural network in the context of performing regression like behavior looks as follows: [CITATION] 
+The third approach taken in this project is a significant departure in methodology from the methods described in the two previous sections.  A neural network approach to projecting future player level outcomes was developed. The general structure of a neural network in the context of performing regression like behavior looks as follows: `r citep(mlpDiagram)`
 
 \begin{center}
 ```{r, out.width = "250px", echo=FALSE}
@@ -307,8 +372,6 @@ knitr::include_graphics("hybrid_model.png")
 
 The entire code listing for generating all of the above models can be found in the GitHub repository listed in the appendices.
 
-## Data Source
-
 ## Technology Used
 The code for the project was developed entirely in Python.  The well established libraries for data wrangling (Pandas, numpy, TensorFlow), building neural networks and analyzing results made this a logical choice for coding up this sort of prototype.  
 
@@ -328,11 +391,11 @@ Hypervisor  |      VMWare Workstation
 
 # Results
 
-TODO
+In this section we will examine the performance of the four classes of projection algorithm.  First up, is the baseline system, Marcel.
 
 ### Marcel
 
-TODO
+The below chart represents Marcel's performance when projecting win shares over the test data set.  The measures in the table represent the correlation, root mean squared error and the mean absolute error of player's projected values when compared to their actual performance.
 
 Eval Metric   |        Value
 --------------|-----------------------
@@ -340,9 +403,11 @@ R             |       0.7242
 RMSE          |       0.0370
 MAE           |       0.0291
 
+Marcel appears to have predictive power.  This is both good and given it's well documented history in baseball analytics, not surprising.  Predicted values correlate strongly with actual results, as denoted by the R values in the above table.  The rmse and mae values are perhaps not intuitive in isolation but the do represent a small percentage of the average value for player WS per 48 (0.11).  These values will provide more use when comparing Marcel with the other projection algorithms in the subsequent sections.
+
 ### Trained Marcel
 
-TODO
+The second algorithm, again is an adaptation of the standard Marcel projection system.  It uses an initial pass over the data in an attempt to come up with more precise values for the weighting schema that Marcel uses (instead of the defaults).
 
 Eval Metric   |        Value
 --------------|-----------------------
@@ -350,23 +415,43 @@ R             |       0.7236
 RMSE          |       0.0375
 MAE           |       0.0296
 
+This is a somewhat surprising result.  With this additional, initial pass over the data, the algorithm actually performs worse across the board when tested out of sample with the test data set.  Correlation between predicted outcomes and real life results decreased sligtly and both measures of error, rmse and mae, increased slightly.  
+
+There is no evidence that this approach to enhancing the standard Marcel system is of any benefit.  It increases complexity and decreases measured performance; a bad combination.
+
 ### Pure Neural Network
 
-TODO
+The next phase of the project was an examination of a pure neural networks based approach.  As previously mentioned, neural network based learning algorithms are themselves tweakable entities and provide the developer with a number of knobs and dials to tune in order to squeeze out as much model performance as possible.  In this project, many iterations of neural networks were used making various tweaks.  The most relevant to performance settings that were tuned were the learning rate of the algorithm, the number of hidden layers given to the network and the optimization algorithm used.  
+
+A summary of the performance of various performance model settings follows.  Also included in the table are the model training time in seconds.  For certain combinations of model settings, this can be an significant amount of time when running on a single server setup.
 
 ```{r, message=FALSE, echo=FALSE}
 dfPNNResults = read.csv('raw_runs_nn.csv')
 kable(dfPNNResults)
 ```
 
+The most performant combination of model inputs can be found in "Run 10" in the above table.  This run used the Adam Optimizer which is an algorithm for first-order gradient-based optimization of stochastic objective functions based on adapive estimates of lower-order moments. `r citep(adam)`  The algorithm is both effective in terms of minimizing loss and performant in terms of computing resources required.  The latter was confirmed in this project as the model training time was significantly lower with this optimization algorithm enabled.
+
+The first column of the above table indicates whether league averages for Win Shares per 48 minutes were included as a predictor variable for the neural network.  Adding this as a predictor increased the neural network's effectiveness across most runs.  This can logically be thought of as giving the neural network a basis to indirectly perform regression towards the mean, arguably the most key part of what makes Marcel effective.
+
+The model performance of the pure neural network based approach ended up being fairly comparable to the pure Marcel approach.  The measures of error magnitude, mae and rmse were essentially equal while the correlation achieved by the neural network lagged only slightly behind. 
+
+One area where Marcel reigns supreme however was the time it took to train and produce projections.  The fastest (and conveniently best) neural network took around 40 seconds to train while Marcel produces it's results in under a second.  
+
 ### Marcel Net
 
-TODO
+The final approach explored in this project was to combine Marcel and a neural network together.  The first phase of the algorithm utilized a full run of the simple (non-trained) Marcel algorithm and created a full set of projections.  Those projection results along with league average values and player ages were then used as predictor variables in a neural network.
+
+The neural network portion of this algorithm again had multiple tunable values.  Those, along with corresponding performance are listed below.
 
 ```{r, message=FALSE, echo=FALSE}
 dfMNNResults = read.csv('raw_runs_mixed.csv')
 kable(dfMNNResults)
 ```
+
+This approach achieved results that surpassed Marcel's baseline level of performance in all 3 of the evaluation metrics. In particular, the configuration in "Run 2" was the top performer of any configuration of any algorithm examined throughout the project. 
+
+Taking the full projection set from "Run 2" of the hybrid algorithm, the following residual plots were created.
 
 ```{r, message=FALSE, echo=FALSE,fig.height=2.75, fig.width=7.5}
 dfHybrid = read.csv('hybrid_projs.csv')
@@ -395,8 +480,35 @@ qqplot.data <- function (vec) # argument: vector of numbers
 qqplot.data(dfHybrid$residuals)
 ```
 
+The look of the plots is roughly what we'd want to see for a projection system.  The residual distriubtion looks to be strongly normal, centered around 0 and shows no discernable skew or tail thickness.  The QQPlot shows data closely associated to the theoretical linear relationship, again suggesting that the residuals come from a population that is normal or nearly normal.
+
+Breaking down our output projection residuals by age shows that the desired, normal distribution is retained throughout the spectrum of NBA player ages.
+
 ```{r, message=FALSE, echo=FALSE,fig.height=4.75, fig.width=7.5}
-ggplot(dfHybrid,aes(dfHybrid$residuals)) + geom_histogram(binwidth=0.01225, colour="black", fill="white") + facet_wrap(~age) + ggtitle("Projection Residuals by Age")
+ggplot(dfHybrid,aes(dfHybrid$residuals)) + geom_histogram(binwidth=0.01225, colour="black", fill="white") + facet_wrap(~age) + ggtitle("Projection Residuals by Age") + xlab("Projection Residuals")
+```
+
+Similarly, breaking the projection outputs down into types of players (Scrub, Role, Star, SuperStar) shows that our algorithm is not biased by the underlying quality of the projected player.  Again, this is a strong positive for the algorithm.
+
+Type      |   WS Per 48     | Example
+----------|-----------------|------------------------------
+Scrub     |    < 0.07       |  Milt Palacio (25 years Old)  
+Role      |    [0.07-0.14)  |  Udonis Haslem (32 years old)
+Star      |    [0.14-0.2)   |  Yao Ming (25 years old)
+Superstar |    > 0.2        |  Lebron James (27 years old)
+
+Table:  Player Roles
+
+```{r, message=FALSE, echo=FALSE,fig.height=4.75, fig.width=7.5}
+df1 <-  transform(dfHybrid, group=cut(as.numeric(sub('[%]', '',  hybrid_pred)), 
+    breaks=c(-Inf,0.07, 0.14, 0.2, Inf),
+      labels=c('Scrub', 'Role', 'Star', 'Superstar')))
+
+#head(df1, 20)
+write.csv(df1, file = "temp_groups.csv")
+df2 <- read.csv(file="temp_groups.csv", header=TRUE, sep=",")
+#head(df2, 20)
+ggplot(df2,aes(df2$residuals)) + geom_histogram(binwidth=0.01225, colour="black", fill="white") + facet_wrap(~group) + ggtitle("Projection Residuals by Role") + xlab("Projection Residuals")
 ```
 
 # Future Work
@@ -413,11 +525,16 @@ My professional work in baseball has shown similar results to the above hockey e
 
 This project set out to examine the efficacy of multiple algorithms for projecting future NBA player level performance.  A total of 4 algorithms were examined with three of them heavily borrowing logic from the well established Marcel the Monkey projection system which originated in the baseball analytics community.  
 
-The most advanced system combined a pure Marcel approach (weighted time average plus regression to the mean) with a wide and deep neural network.  This hybrid approach achieved superior performance compared to systems using Marcel or neural networks alone.  The one significant downside of any of the algorithms leveraging a neural network was the training time and computing power needed when compared to a pure Marcel approach.  The neural network based algorithms required orders of magnitude greater compute time to complete.  
+The most advanced system combined a pure Marcel approach (weighted time average plus regression to the mean) with a wide and deep neural network.  This hybrid approach achieved superior performance compared to systems using Marcel or neural networks alone.  It also produced residuals that look to be both normally distributed and unaffected by the age or skill of the underlying player.  This is a strong plus for the system.  The one significant downside of any of the algorithms leveraging a neural network was the training time and computing power needed when compared to a pure Marcel approach.  The neural network based algorithms required orders of magnitude greater compute time to complete.  
 
 Ultimately, the choice of algorithm would depend on use case.  If projection accuracy was the motivating decision variable, the hybrid system developed here provides that.  But if the algorithm needs to be run and updated multiple times per minute, the amount of computing power required may become prohibitive (depending on budget of course).  The Marcel system runs very quickly, has minimal code and library dependencies and is in the same realm accuracy wise as the more complicated systems. It may very well be the correct choice in some situations.
 
 # References
+
+```{r, results='asis', echo=FALSE}
+BibOptions(style="latex", bib.style="numeric")
+bibliography()
+```
 
 # Appendix A:  Code Repository
 
